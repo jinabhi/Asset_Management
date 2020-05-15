@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <title>Asset Management</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+  <style>
+    body {
+      margin: 0;
+      font-family: "Lato", sans-serif;
+    }
+
+    .sidebar {
+      margin: 0;
+      padding: 0;
+      width: 200px;
+      background-color: #f1f1f1;
+      position: fixed;
+      height: 100%;
+      overflow: auto;
+    }
+
+    .sidebar a {
+      display: block;
+      color: black;
+      padding: 16px;
+      text-decoration: none;
+    }
+
+    .sidebar a.active {
+      background-color: rgb(0, 0, 0);
+      color: white;
+    }
+
+    .sidebar a:hover:not(.active) {
+      background-color: #555;
+      color: white;
+    }
+
+    div.content {
+      margin-left: 200px;
+      padding: 1px 16px;
+      height: 100%;
+    }
+
+    @media screen and (max-width: 700px) {
+      .sidebar {
+        width: 100%;
+        height: auto;
+        position: relative;
+      }
+
+      .sidebar a {
+        float: left;
+      }
+
+      div.content {
+        margin-left: 0;
+      }
+    }
+
+    @media screen and (max-width: 400px) {
+      .sidebar a {
+        text-align: center;
+        float: none;
+      }
+    }
+  </style>
+
+</head>
+
+<body>
+  <div class="sidebar">
+    <a href="supportHome">View Profile</a>
+    <a href="viewReports">Reports</a>
+    <a href="supportHome">Change password</a>
+    <a href="logout">Log Out</a>
+  </div>
+
+  <div class="content">
+
+    <div class="container">
+      <h2>Pending Requests </h2>
+      {{#if msg}}
+      <div class="alert alert-success alert-dismissible"><a href="#" class="close" data-dismiss="alert"
+          aria-label="close">&times;</a> <strong>{{msg}}</strong> </div>
+      {{/if}}
+      <div class="jumbotron">
+        {{!-- View User Table --}}
+        <div id="userTable">
+          <table class='table table-hover'>
+            <tr>
+              <th>Request ID</th>
+              <th>Requested Asset Name</th>
+              <th>Eployee ID</th>
+              <th>Manager ID</th>
+              <th>Request Date</th>
+              <th>Request Status</th>
+              <th>Accept Request</th>
+            </tr>
+            {{#each data}}
+            <tr>
+              {{!--<td><input type="hidden" value="{{this._id}}" id="userdbid"></td> --}}
+              <td>{{this.reqid}}</td>
+              <td>{{this.assetName}}</td>
+              <td>{{this.reid}}</td>
+              <td>{{this.rmid}}</td>
+              <td>{{this.reqDate}}</td>
+              <td>{{this.reqStatus}}</td>
+              <td><a href="acceptReqSup?reqsid={{this.reqid}}">Accept and Despatch</a></td>
+            </tr>
+            {{/each}}
+          </table>
+          <div class="col-sm-offset-2 col-sm-10">
+            <a href="supportHome" type="button" class="btn btn-default">Back</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</body>
+
+</html>

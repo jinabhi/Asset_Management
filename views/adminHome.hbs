@@ -1,0 +1,282 @@
+<html>
+
+<head>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <style>
+    body {
+      margin: 0;
+      font-family: "Lato", sans-serif;
+    }
+
+    .sidebar {
+      margin: 0;
+      padding: 0;
+      width: 200px;
+      background-color: #f1f1f1;
+      position: fixed;
+      height: 100%;
+      overflow: auto;
+    }
+
+    .sidebar a {
+      display: block;
+      color: black;
+      padding: 16px;
+      text-decoration: none;
+    }
+
+    .sidebar a.active {
+      background-color: rgb(0, 0, 0);
+      color: white;
+    }
+
+    .sidebar a:hover:not(.active) {
+      background-color: #555;
+      color: white;
+    }
+
+    div.content {
+      margin-left: 200px;
+      padding: 1px 16px;
+      height: 100%;
+    }
+
+    @media screen and (max-width: 700px) {
+      .sidebar {
+        width: 100%;
+        height: auto;
+        position: relative;
+      }
+
+      .sidebar a {
+        float: left;
+      }
+
+      div.content {
+        margin-left: 0;
+      }
+    }
+
+    @media screen and (max-width: 400px) {
+      .sidebar a {
+        text-align: center;
+        float: none;
+      }
+    }
+  </style>
+  <script>
+    function openCreateUser() {
+      document.getElementById("creatUser").style.display = "block";
+    }
+
+    function openChangePwd() {
+      document.getElementById("changePassword").style.display = "block";
+    }
+
+    function openCreateAsset() {
+      document.getElementById("addAsset").style.display = "block";
+    }
+
+    function closeCreateUser() {
+      document.getElementById("creatUser").style.display = "none";
+    }
+
+    function closeChangePwd() {
+      document.getElementById("changePassword").style.display = "none";
+    }
+
+    function closeCreateAsset() {
+      document.getElementById("addAsset").style.display = "none";
+    }
+
+    function manager() {
+      var category = document.getElementById("empCategory").value;
+      if (category == "Employee") {
+        document.getElementById("mgrdiv").style.display = "block";
+      }
+      else
+        document.getElementById("mgrdiv").style.display = "none";
+    }
+
+    function validateForm() {
+      var cat = document.getElementById("empCategory").value;
+      var mid = document.getElementById("mgrid").value;
+      if ((cat == "Employee") && (mid == "")) {
+        alert("If Employee type is an Employee, his Manager ID  must be filled out");
+        return false;
+      }
+    }
+  </script>
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+</head>
+
+<body>
+
+  <div class="sidebar">
+    <a href="#" onclick="openCreateUser();closeChangePwd();closeCreateAsset();">Create User</a>
+    <a href="viewUser">View User</a>
+    <a href="#" onclick="openCreateAsset();closeChangePwd();closeCreateUser();">Create Asset</a>
+    <a href="#" onclick="openChangePwd();closeCreateUser();closeCreateAsset();">Change password</a>
+    <a href="logout">Log Out</a>
+  </div>
+
+  <div class="content">
+    <h2 style="text-align: center">Welcome Admin</h2>
+    <div class="container">
+      {{#if msg}}
+      <div class="alert alert-success alert-dismissible"><a href="#" class="close" data-dismiss="alert"
+          aria-label="close">&times;</a> <strong>{{msg}}</strong> </div>
+      {{/if}}
+      <div class="jumbotron" style="width: 1000px; height: 100%">
+        {{!-- Create User Form --}}
+
+        <div id="creatUser" style="display: none">
+          <h3>Create New User</h3>
+          <form class="form-horizontal" action="addUser" method="POST" onsubmit="return validateForm()">
+            <div class="form-group">
+              <label class="control-label col-sm-2" for="fn">First Name:</label>
+              <div class="col-sm-10">
+                <input type="text" class="form-control" id="fname" placeholder="Enter First Name" name="fname">
+              </div>
+            </div>
+            <div class="form-group">
+              <label class="control-label col-sm-2" for="ln">Last Name:</label>
+              <div class="col-sm-10">
+                <input type="text" class="form-control" id="lname" placeholder="Enter Last Name" name="lname">
+              </div>
+            </div>
+            <div class="form-group">
+              <label class="control-label col-sm-2" for="email">Email:</label>
+              <div class="col-sm-10">
+                <input type="email" class="form-control" id="email" placeholder="Enter email" name="email">
+              </div>
+            </div>
+            <div class="form-group">
+              <label class="control-label col-sm-2" for="pwd">Password:</label>
+              <div class="col-sm-10">
+                <input type="password" class="form-control" id="pwd" placeholder="Enter password" name="pwd">
+              </div>
+            </div>
+            <div class="form-group">
+              <label class="col-sm-2 control-label" for="employee_categorie">Employee CATEGORY</label>
+              <div class="col-sm-10">
+                <select id="empCategory" name="employeeCategory" class="form-control" onchange="manager()">
+                  <option value="Support">Support</option>
+                  <option value="Manager">Manager</option>
+                  <option value="Employee">Employee</option>
+                </select>
+              </div>
+            </div>
+            <div class="form-group">
+              <label class="control-label col-sm-2" for="id">Employee ID</label>
+              <div class="col-sm-10">
+                <input type="text" class="form-control" id="eid" placeholder="Enter Employee ID" name="empid">
+              </div>
+            </div>
+            <div class="form-group" id="mgrdiv" style="display: none">
+              <label class="control-label col-sm-2" for="mid">Manager ID</label>
+              <div class="col-sm-10">
+                <input type="text" class="form-control" id="mgrid" placeholder="Enter Manager ID" name="mgrid">
+              </div>
+            </div>
+            <div class="form-group">
+              <label class="control-label col-sm-2" for="mob">Mobile Number:</label>
+              <div class="col-sm-10">
+                <input type="text" class="form-control" id="mobNum" placeholder="Mobile number" name="mobNum">
+              </div>
+            </div>
+            <div class="form-group">
+              <div class="col-sm-offset-2 col-sm-10">
+                <input type="submit" value="Create User" class="btn btn-default">
+              </div>
+            </div>
+            <div class="form-group">
+              <div class="col-sm-offset-2 col-sm-10">
+                <button type="button" class="btn btn-default" onclick="closeCreateUser()">Close</button>
+              </div>
+            </div>
+          </form>
+        </div>
+
+        {{!-- Change Password Form --}}
+
+        <div id="changePassword" style="display: none">
+          <h3>Change Password</h3>
+          <form class="form-horizontal" action="changePass" method="POST">
+
+            <div class="form-group">
+              <label class="control-label col-sm-2" for="pwd">Current Password:</label>
+              <div class="col-sm-10">
+                <input type="password" class="form-control" id="pwd" placeholder="Enter Current password" name="oldPwd">
+              </div>
+            </div>
+            <div class="form-group">
+              <label class="control-label col-sm-2" for="pwd">New Password:</label>
+              <div class="col-sm-10">
+                <input type="password" class="form-control" id="pwd" placeholder="Enter New password" name="newPwd">
+              </div>
+            </div>
+            <div class="form-group">
+              <div class="col-sm-offset-2 col-sm-10">
+                <button type="submit" class="btn btn-default">Change Password</button>
+              </div>
+            </div>
+            <div class="form-group">
+              <div class="col-sm-offset-2 col-sm-10">
+                <button type="button" class="btn btn-default" onclick="closeChangePwd()">Close</button>
+              </div>
+            </div>
+          </form>
+        </div>
+
+        {{!-- Create Asset Form --}}
+
+        <div id="addAsset" style="display: none">
+          <h3>Add Asset to Company's Inventory</h3>
+          <form class="form-horizontal" action="addAsset" method="POST">
+            <div class="form-group">
+              <label class="control-label col-sm-2" for="aid">Asset ID:</label>
+              <div class="col-sm-10">
+                <input type="text" class="form-control" id="aid" placeholder="Enter Asset ID" name="assetid">
+              </div>
+            </div>
+            <div class="form-group">
+              <label class="col-sm-2 control-label" for="asset_type">Asset Type</label>
+              <div class="col-sm-10">
+                <select id="assetType" name="assetType" class="form-control">
+                  <option value="Laptop">Laptop</option>
+                  <option value="Hard_Disk">Hard Disk</option>
+                  <option value="Head_Phone">Head Phone</option>
+                  <option value="Projector">Projector</option>
+                </select>
+              </div>
+            </div>
+            <div class="form-group">
+              <label class="control-label col-sm-2" for="quantity">Quantity:</label>
+              <div class="col-sm-10">
+                <input type="number" class="form-control" id="qty" placeholder="Enter Quantity" name="quantity">
+              </div>
+            </div>
+            <div class="form-group">
+              <div class="col-sm-offset-2 col-sm-10">
+                <button type="submit" class="btn btn-default">ADD</button>
+              </div>
+            </div>
+            <div class="form-group">
+              <div class="col-sm-offset-2 col-sm-10">
+                <button type="button" class="btn btn-default" onclick="closeCreateAsset()">Close</button>
+              </div>
+            </div>
+          </form>
+        </div>
+
+      </div>
+    </div>
+
+  </div>
+
+</body>
+
+</html>
